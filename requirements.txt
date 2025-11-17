@@ -1,3 +1,5 @@
 streamlit
 evaluate
 rouge_score
+openai
+pandas
