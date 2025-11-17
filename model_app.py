@@ -18,7 +18,6 @@ import evaluate
 import pandas as pd
 import openai
 
-# Configure OpenAI using Streamlit secrets
 # In Streamlit Cloud, define OPENAI_API_KEY in "App settings" -> "Secrets"
 openai.api_key = st.secrets.get("OPENAI_API_KEY", None)
 
