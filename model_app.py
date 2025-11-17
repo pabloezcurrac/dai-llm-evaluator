@@ -4,6 +4,7 @@ from pathlib import Path
 from collections import Counter
 import random
 import textwrap
+from models import rouge  # Or your specific model class
 
 # ===============================
 # 1. DATA LOADING
