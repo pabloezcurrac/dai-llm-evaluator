@@ -121,8 +121,10 @@ def evaluate_answer(reference: str, student_answer: str) -> dict:
 # 3. LLM-BASED EVALUATOR (HF Hosted with auto-fallback)
 # ===============================
 
-# Ordered list of open, serverless-ready models to try:
+# Ordered list of open, serverless-ready models to try (small → larger)
 OPEN_MODEL_CANDIDATES = [
+    "TinyLlama/TinyLlama-1.1B-Chat-v1.0",   # tiny, almost always available
+    "google/flan-t5-base",                  # seq2seq, widely available
     "HuggingFaceH4/zephyr-7b-beta",
     "Qwen/Qwen2.5-7B-Instruct",
     "mistralai/Mistral-7B-Instruct-v0.3",
