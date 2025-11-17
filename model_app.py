@@ -1,14 +1,13 @@
 # -*- coding: utf-8 -*-
-"""model_app (HF Hosted - Mistral locked)
+"""model_app (HF Hosted - with auto-fallback)
 
 Streamlit app for ML Q&A evaluation:
 - Automatic evaluator: ROUGE-L + keyword coverage
-- LLM judge: Hugging Face Inference API (Hosted)
-  Model: mistralai/Mistral-7B-Instruct-v0.3 (open access)
+- LLM judge: Hugging Face Inference API (Hosted), with auto-fallback across open models
 
 Setup:
   1) pip install streamlit evaluate rouge-score pandas huggingface_hub
-  2) Add Streamlit secret: HF_TOKEN = "hf_xxx..."
+  2) Streamlit secret: HF_TOKEN = "hf_xxx..."
   3) streamlit run model_app.py
 """
 
@@ -21,7 +20,7 @@ import re
 
 import streamlit as st
 import evaluate
-import pandas as pd  # optional for future tables
+import pandas as pd  # optional
 
 from huggingface_hub import InferenceClient
 
@@ -119,10 +118,15 @@ def evaluate_answer(reference: str, student_answer: str) -> dict:
 
 
 # ===============================
-# 3. LLM-BASED EVALUATOR (HF Hosted - Mistral locked)
+# 3. LLM-BASED EVALUATOR (HF Hosted with auto-fallback)
 # ===============================
 
-DEFAULT_MODEL_ID = "mistralai/Mistral-7B-Instruct-v0.3"  # open-access, no license gating
+# Ordered list of open, serverless-ready models to try:
+OPEN_MODEL_CANDIDATES = [
+    "HuggingFaceH4/zephyr-7b-beta",
+    "Qwen/Qwen2.5-7B-Instruct",
+    "mistralai/Mistral-7B-Instruct-v0.3",
+]
 
 SYSTEM_INSTRUCTIONS = """
 You are a rigorous and fair university-level Machine Learning professor.
@@ -146,7 +150,7 @@ Do not output anything outside the JSON object.
 
 def build_llm_prompt(question: str, reference_answer: str, student_answer: str) -> str:
     """
-    Single-string, instruction-style prompt that works well for hosted instruct models.
+    Single-string, instruction-style prompt.
     """
     return f"""
 [SYSTEM]
@@ -174,16 +178,10 @@ def get_hf_client() -> InferenceClient | None:
         return None
     return InferenceClient(token=token)
 
-def generate_hosted_json_judgement(
-    client: InferenceClient,
-    model_id: str,
-    prompt: str,
-    max_new_tokens: int = 384,
-    temperature: float = 0.1,
-    top_p: float = 0.9
-) -> str:
+def try_text_generation(client: InferenceClient, model_id: str, prompt: str,
+                        max_new_tokens: int, temperature: float, top_p: float = 0.9) -> str | None:
     """
-    Calls Hugging Face Inference API text generation endpoint with friendly errors.
+    Try a single serverless call. Returns text or None if the model isn't available/mapped.
     """
     try:
         return client.text_generation(
@@ -195,19 +193,13 @@ def generate_hosted_json_judgement(
             stream=False,
             return_full_text=False,
         ).strip()
-    except ValueError as e:
-        # Most common cause: model not available for your token or not mapped to serverless task
-        st.error(
-            "HF Inference API raised a ValueError. "
-            "This usually means your token has no access to the selected model or the model "
-            "is not available for serverless text-generation.\n\n"
-            f"**Model:** `{model_id}`\n\n"
-            "Try again later or verify model availability."
-        )
-        raise
+    except ValueError:
+        # Most common: model not available for serverless or token lacks access.
+        return None
     except Exception as e:
-        st.error(f"HF Inference API call failed: {e}")
-        raise
+        # Surface other issues (network, rate limit) to the user.
+        st.warning(f"Inference API call failed for `{model_id}`: {e}")
+        return None
 
 def parse_first_json(text: str) -> dict:
     """
@@ -229,7 +221,7 @@ def evaluate_answer_llm(
     max_new_tokens: int
 ) -> dict:
     """
-    LLM judge using Hugging Face Inference API (Mistral-7B-Instruct).
+    LLM judge using HF Inference API with auto-fallback across open models.
     Returns: {"score": float, "analysis": str, "missing_points": list}
     """
     client = get_hf_client()
@@ -241,16 +233,36 @@ def evaluate_answer_llm(
         }
 
     prompt = build_llm_prompt(question, reference, student_answer)
-    raw = generate_hosted_json_judgement(
-        client=client,
-        model_id=DEFAULT_MODEL_ID,
-        prompt=prompt,
-        max_new_tokens=max_new_tokens,
-        temperature=temperature,
-        top_p=0.9
-    )
 
-    data = parse_first_json(raw)
+    last_text = None
+    used_model = None
+    for mid in OPEN_MODEL_CANDIDATES:
+        text = try_text_generation(
+            client=client,
+            model_id=mid,
+            prompt=prompt,
+            max_new_tokens=max_new_tokens,
+            temperature=temperature,
+            top_p=0.9
+        )
+        if text:
+            last_text = text
+            used_model = mid
+            break
+
+    if last_text is None:
+        st.error(
+            "All open hosted models failed for your token or are unavailable on serverless right now. "
+            "Please verify your `HF_TOKEN` and try again later.\n\n"
+            f"Tried: {', '.join(OPEN_MODEL_CANDIDATES)}"
+        )
+        return {
+            "score": 0.0,
+            "analysis": "No hosted model available for your token. Check token or try later.",
+            "missing_points": [],
+        }
+
+    data = parse_first_json(last_text)
     if data:
         try:
             score = float(data.get("score", 0))
@@ -259,15 +271,16 @@ def evaluate_answer_llm(
             if not isinstance(missing_points, list):
                 missing_points = []
             score = max(0.0, min(100.0, score))
+            if used_model:
+                analysis = f"[Model: {used_model}] " + analysis
             return {"score": score, "analysis": analysis, "missing_points": missing_points}
         except Exception:
             pass
 
-    # Fallback if no strict JSON
     return {
         "score": 0.0,
         "analysis": (
-            "Could not parse strict JSON from the model output. "
+            f"[Model: {used_model}] Could not parse strict JSON from the model output. "
             "Lower temperature, raise max_new_tokens, or refine the prompt."
         ),
         "missing_points": [],
@@ -292,15 +305,15 @@ if "history" not in st.session_state:
 # ===============================
 
 st.set_page_config(
-    page_title="ML Q&A Evaluator (HF Hosted - Mistral)",
+    page_title="ML Q&A Evaluator (HF Hosted - Auto Fallback)",
     page_icon="🤖",
     layout="wide",
 )
 
-st.title("🤖 ML Concept Q&A Evaluator (Hugging Face Hosted - Mistral 7B Instruct)")
+st.title("🤖 ML Concept Q&A Evaluator (Hugging Face Hosted)")
 st.write(
     "This app asks ML questions, collects your answer, and evaluates it automatically (ROUGE + keywords). "
-    "It also uses a **hosted** Hugging Face model (Mistral-7B-Instruct) as a JSON-only judge."
+    "It also uses a hosted Hugging Face model as a JSON-only judge, with automatic fallback across open models."
 )
 
 with st.sidebar:
@@ -319,8 +332,9 @@ with st.sidebar:
                 del st.session_state[key]
 
     st.markdown("---")
-    st.subheader("HF Judge Settings (fixed model)")
-    st.markdown("**Using Hosted Model:** `mistralai/Mistral-7B-Instruct-v0.3` ✅ (open-access)")
+    st.subheader("HF Judge Settings")
+    st.markdown("**Hosted models tried (in order):**")
+    st.code("\n".join(OPEN_MODEL_CANDIDATES), language="text")
     temperature = st.slider("Temperature", 0.0, 1.0, 0.1, 0.05)
     max_new_tokens = st.slider("Max new tokens", 64, 1024, 384, 64)
 
@@ -331,7 +345,7 @@ with st.sidebar:
         avg_score = sum(h["evaluation"]["automatic"]["score"] for h in st.session_state.history) / len(st.session_state.history)
         st.write(f"Average automatic score: **{avg_score:.1f} / 100**")
     st.markdown("---")
-    st.caption("Assignment 11.00 – LLM Evaluator (Streamlit + HF Inference API, Mistral 7B).")
+    st.caption("Assignment 11.00 – LLM Evaluator (Streamlit + HF Inference API).")
 
 # Initialize question
 if st.session_state.current_qa is None:
@@ -365,7 +379,7 @@ if submit_clicked and student_answer.strip():
     # Automatic evaluation
     eval_auto = evaluate_answer(reference_answer, student_answer)
 
-    # Hosted HF judge (Mistral)
+    # Hosted HF judge (auto-fallback)
     eval_llm = evaluate_answer_llm(
         question=question,
         reference=reference_answer,
@@ -396,7 +410,7 @@ if "last_eval_auto" in st.session_state:
     st.write(f"**Score (0–100):** `{eval_auto['score']}`")
     st.write(textwrap.fill(eval_auto["explanation"], width=100))
 
-    st.markdown("### 🧠 LLM-based Evaluation (HF Hosted Judge - Mistral)")
+    st.markdown("### 🧠 LLM-based Evaluation (HF Hosted Judge)")
     st.write(f"**LLM Score (0–100):** `{eval_llm['score']}`")
     st.write(textwrap.fill(eval_llm["analysis"], width=100))
     if eval_llm.get("missing_points"):
