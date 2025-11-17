@@ -1,0 +1,602 @@
+[
+    {
+        "question": "Activation Function",
+        "answer": "An activation function is a mathematical function that transforms! each neuron\u2019s aggregated input (pre\u2011activation) into its output signal by applying a non\u2011linear, usually differentiable mapping that is applied element\u2011wise across a layer, thereby introducing the capacity for neural networks to model complex, non\u2011linear relationships and enabling gradient\u2011based training through back\u2011propagation by providing defined derivatives almost everywhere, while also often imposing desirable properties such as monotonicity, bounded output range, or sparsity of activation, and may be parameter\u2011free (e.g., sigmoid, hyperbolic tangent, rectified linear unit) or learnable (e.g., parametric rectified linear unit), they consequently influence the stability of learning and the representational power of deep architectures"
+    },
+    {
+        "question": "Anomaly Detection",
+        "answer": "Anomaly detection is a subfield of unsupervised learning that identifies data points whose feature patterns deviate significantly from the statistical regularities of a reference dataset, assuming anomalies are scarce relative to normal observations, and it does so by applying necessary-and-sufficient criteria\u2014such as distance\u2011based thresholds, density\u2011based neighborhood scores, reconstruction error from autoencoders, or probabilistic likelihood under a learned model\u2014during a training phase that captures normal behavior and a testing phase that flags any instance violating the established criteria, thereby providing practitioners with a systematic method to isolate rare or unexpected events while aiming to minimize false positives and maximize recall"
+    },
+    {
+        "question": "Area Under the Curve (AUC)",
+        "answer": "The Area Under the Curve (AUC) is a scalar performance metric for binary classifiers that is defined as the definite integral of the receiver operating characteristic (ROC) curve with respect to the false positive rate over the interval [0,1], thereby quantifying the probability that the classifier ranks a randomly chosen positive instance higher than a randomly chosen negative instance"
+    },
+    {
+        "question": "Artificial Intelligence",
+        "answer": "Artificial intelligence is a subfield that designs algorithms enabling computers to perform tasks that normally require human cognitive abilities, by learning patterns from data, adapting to new inputs, and making autonomous decisions"
+    },
+    {
+        "question": "Artificial Neural Network (ANN)",
+        "answer": "An artificial neural network (ANN) is a computational model that belongs to the class of parametric function approximators and consists of layered collections of interconnected processing units (neurons) whose weighted connections are iteratively adjusted by a learning algorithm to map input vectors to output vectors through nonlinear activation functions"
+    },
+    {
+        "question": "Backpropagation",
+        "answer": "Backpropagation is a gradient-based optimization algorithm that computes the necessary and sufficient partial derivatives of a scalar loss function with respect to each trainable weight and bias in a differentiable feedforward neural network by first performing a forward pass to evaluate activations, then recursively applying the chain rule from the output layer back through each hidden layer while assuming differentiable activation functions, accumulating gradient contributions, and finally delivering these gradients to update parameters via gradient descent or related optimization schemes, constituting a reverse-mode automatic differentiation procedure that yields exact gradients under the assumption of differentiable components and whose computational complexity scales linearly with the number of network parameters"
+    },
+    {
+        "question": "Bagging and Random Forests",
+        "answer": "Bagging and random forests are ensemble methods that construct multiple decision trees trained on bootstrap samples, where bagging aggregates predictions by majority vote or averaging, and random forests further decorrelate trees by selecting a random subset of features at each split"
+    },
+    {
+        "question": "Batch Size",
+        "answer": "Batch size is a hyperparameter that specifies the exact number of training examples processed together in each forward and backward propagation step, thereby determining the granularity of weight updates"
+    },
+    {
+        "question": "Bayes' Theorem",
+        "answer": "Bayes' Theorem is a probabilistic inference rule that provides the necessary and sufficient relationship that the posterior probability of a hypothesis equals its prior probability multiplied by the likelihood of observed data divided by the marginal likelihood of the data"
+    },
+    {
+        "question": "Bias-Variance Tradeoff",
+        "answer": "The bias-variance tradeoff is a relationship that a predictive model's prediction error can be decomposed into irreducible error, bias error due to systematic deviation from the true function, and variance error due to sensitivity to training data fluctuations, such that reducing bias typically increases variance and vice versa, and optimal generalization requires balancing these components"
+    },
+    {
+        "question": "Boosting and Strong Learners",
+        "answer": "Boosting is an ensemble method that iteratively trains weak learners, each focusing on the errors of its predecessor, to produce a strong learner\u2014a composite model whose predictive accuracy exceeds that of any individual constituent model"
+    },
+    {
+        "question": "Bootstrapping",
+        "answer": "Bootstrapping is a self\u2011training methodology that a practitioner applies when a model initially trained on a limited labeled dataset iteratively generates pseudo\u2011labels for unlabeled data, incorporates those pseudo\u2011labeled instances into the training set, and repeats this process until convergence, thereby expanding the effective training corpus without additional human annotation and improving predictive performance under the necessary and sufficient condition that each iteration\u2019s pseudo\u2011labels meet a predefined confidence threshold"
+    },
+    {
+        "question": "Class Imbalance",
+        "answer": "Class imbalance is a data distribution condition that occurs when the number of instances belonging to one or more target classes is significantly lower than the number of instances belonging to other classes, such that the minority class(es) represent a small proportion of the overall dataset, which can adversely affect model training and evaluation if not addressed"
+    },
+    {
+        "question": "Classification",
+        "answer": "Classification is a supervised learning task that learns a function mapping input feature vectors to a finite set of categorical class labels, enabling the model to predict the correct label for previously unseen instances"
+    },
+    {
+        "question": "Clustering",
+        "answer": "Clustering is an unsupervised learning technique that partitions a finite set of data points represented in a feature space into a collection of non\u2011overlapping groups, called clusters, such that the within\u2011cluster similarity\u2014measured by a chosen distance or similarity function\u2014is maximized while the between\u2011cluster similarity is minimized, the assignment being derived solely from the input attributes without reference to any external label, and the resulting partition is typically obtained by optimizing an explicit objective function (e.g., minimizing total intra\u2011cluster variance) or by iteratively updating prototype representations according to a defined algorithmic procedure that terminates upon convergence of cluster assignments or after a predetermined number of iterations"
+    },
+    {
+        "question": "Confusion Matrix",
+        "answer": "A confusion matrix is a tabular summary (matrix) that is a performance measurement tool for classification models, showing the counts of true positives, false positives, true negatives, and false negatives for each class, thereby providing necessary and sufficient information to compute accuracy, precision, recall, and other derived metrics, including multi\u2011class scenarios where rows correspond to actual classes and columns to predicted classes, and the matrix is ordered such that the diagonal entries represent correct predictions while off\u2011diagonal entries represent errors, enabling practitioners to diagnose class\u2011wise performance and class imbalance effects, and the matrix can be visualized as a heatmap for rapid interpretation"
+    },
+    {
+        "question": "Convolutional Neural Network (CNN)",
+        "answer": "A Convolutional Neural Network (CNN) is a feedforward artificial neural network architecture that incorporates convolutional layers applying learnable linear filters across spatially structured input data, weight sharing, local receptive fields, and optional pooling layers to achieve translational invariance and hierarchical feature extraction, with fully connected layers mapping the extracted features to output predictions"
+    },
+    {
+        "question": "Cosine Similarity",
+        "answer": "Cosine similarity is a similarity measure that quantifies the orientation similarity between two non\u2011zero feature vectors by computing the dot product of the vectors divided by the product of their Euclidean norms; this value lies in [\u20111,1] and equals 1 if and only if the vectors are positive scalar multiples, equals 0 if and only if the vectors are orthogonal, and equals \u20131 if and only if they are opposite direction; it is scale\u2011invariant, requiring only the direction of vectors irrespective of their magnitude, and is computationally efficient for high\u2011dimensional sparse representations common in text and recommender systems"
+    },
+    {
+        "question": "Cost Function",
+        "answer": "A cost function is a scalar-valued, differentiable objective function that assigns a numerical loss to each pair of model predictions and corresponding true target values, thereby providing a necessary and sufficient criterion for guiding the optimization of model parameters\u2014typically via gradient descent or related algorithms\u2014so that minimizing this loss is equivalent to achieving the best possible performance on the specified training objective under the chosen error metric, and may optionally incorporate regularization terms that penalize model complexity, weighting schemes that reflect class imbalance, and batch-averaging to ensure stable gradient estimates across training iterations for supervised learning tasks such as classification and regression"
+    },
+    {
+        "question": "Cross-validation",
+        "answer": "Cross-validation is a model evaluation technique that systematically partitions a dataset into complementary training and validation subsets multiple times, ensuring that each observation is used for both training and validation exactly once (as in k-fold cross-validation) or according to a defined resampling scheme, thereby providing a necessary and sufficient estimate of a model\u2019s generalization performance while mitigating over-fitting risk"
+    },
+    {
+        "question": "Curse of Dimensionality",
+        "answer": "The curse of dimensionality is a phenomenon that occurs when the number of features grows so large that the volume of the input space expands exponentially, causing data points to become sparsely distributed, distances between points to converge, and statistical estimates\u2014including similarity measures and model generalization\u2014to deteriorate, thereby rendering many algorithms ineffective unless dimensionality reduction or exponentially larger training samples are employed"
+    },
+    {
+        "question": "Data",
+        "answer": "Data are the structured collections of observations, measurements, or records\u2014each represented as a finite set of attribute\u2013value pairs or tensors\u2014that serve as the necessary and sufficient input for algorithms to infer statistical patterns, learn predictive functions, or update model parameters, and whose validity, format, and labeling determine the applicability of supervised, unsupervised, or reinforcement learning methods, may be raw or preprocessed, can be partitioned into training, validation, and test subsets, and often include feature vectors and, for supervised tasks, target labels that guide loss computation, they are typically stored in tabular, image, text, or graph formats, and must satisfy assumptions of independence, identical distribution, and sufficient coverage of the underlying data-generating distribution"
+    },
+    {
+        "question": "Data Augmentation",
+        "answer": "Data augmentation is a preprocessing technique that artificially expands a training dataset by applying label-preserving transformations to existing examples, thereby providing additional supervised instances necessary and sufficient for improving model generalization"
+    },
+    {
+        "question": "Data Encoding",
+        "answer": "Data encoding is the process of transforming raw input features into a structured numerical representation that a learning algorithm can ingest, where the representation is both necessary and sufficient to preserve the information required for the model to learn the target mapping while conforming to the algorithm's datatype and dimensionality constraints"
+    },
+    {
+        "question": "Data Leakage",
+        "answer": "Data leakage is a form of training-data contamination that occurs when information from the test set, future observations, or the target variable is inadvertently incorporated into the training process, violating the independence assumption between training and evaluation data and constituting a necessary and sufficient condition for overestimated performance"
+    },
+    {
+        "question": "Data Preprocessing",
+        "answer": "Data preprocessing is a data preparation phase that systematically cleans, transforms, and structures raw input data into a consistent, analysis\u2011ready format by applying operations such as missing\u2011value handling, scaling, encoding, and feature construction, which are necessary and sufficient to enable effective model training"
+    },
+    {
+        "question": "Data Science",
+        "answer": "Data science is an interdisciplinary practice that extracts knowledge and actionable insights from structured and unstructured data by formulating problems, preprocessing data, applying statistical and algorithmic models, and communicating results to support decision\u2011making"
+    },
+    {
+        "question": "Data Shuffling",
+        "answer": "Data shuffling is a preprocessing operation that randomly permutes the order of training instances before each training epoch, thereby eliminating order bias and ensuring stochastic gradient estimates remain unbiased"
+    },
+    {
+        "question": "Decision Trees",
+        "answer": "A decision tree is a supervised learning model that recursively partitions the feature space by applying hierarchical, axis\u2011aligned tests on input variables until leaf nodes assign class labels or real\u2011valued predictions, such that the tree structure and split criteria are both necessary and sufficient to determine the model\u2019s predictions for any given instance"
+    },
+    {
+        "question": "Deep Learning",
+        "answer": "Deep learning is a subfield that exclusively utilizes multilayer artificial neural networks\u2014structures of at least three stacked layers of parameterized nonlinear computational units whose weights are adjusted by backpropagation of error gradients computed via stochastic gradient descent or related optimization algorithms on massive labeled or unlabeled datasets\u2014to automatically and jointly learn hierarchical feature representations and decision functions that are both necessary and sufficient for end-to-end mapping from raw inputs to target outputs, while preserving differentiability requirements, supporting end-to-end training via differentiable loss functions, and scaling across distributed compute resources, thereby eliminating the need for manual feature extraction"
+    },
+    {
+        "question": "Dense Vector",
+        "answer": "A dense vector is a fixed\u2011dimensional numeric array in which every component holds a real\u2011valued entry, typically stored contiguously, and is used to represent data such that the vector contains no explicit zero entries and all positions contribute to similarity calculations, providing a necessary and sufficient description of a continuous, fully populated embedding"
+    },
+    {
+        "question": "Dimensionality Reduction",
+        "answer": "Dimensionality reduction is a preprocessing technique that transforms a dataset with a high number of features into a lower\u2011dimensional representation such that the mapping retains sufficient information\u2014typically measured by preserved variance, pairwise distances, or class separability\u2014while discarding redundant or noisy dimensions, and this process may employ linear methods (e.g., Principal Component Analysis) or nonlinear methods (e.g., t\u2011Distributed Stochastic Neighbor Embedding) that are defined by the necessary and sufficient condition of minimizing information loss subject to a specified dimensionality constraint, and can be applied either before model training to improve computational efficiency and mitigate overfitting, or after training to aid interpretation of learned representations"
+    },
+    {
+        "question": "Dropout",
+        "answer": "Dropout is a regularization technique that randomly deactivates a subset of a neural network\u2019s units during each training iteration with a specified probability, thereby preventing co\u2011adapt!ation of features and encouraging robust, generalized representations"
+    },
+    {
+        "question": "Early Stopping",
+        "answer": "Early stopping is a regularization technique that terminates the iterative optimization of model parameters when a designated performance metric evaluated on a held\u2011out validation dataset fails to improve by at least a specified threshold for a consecutive number of training epochs (the patience parameter), thereby preventing further fitting to noise in the training data and ensuring that the final model parameters correspond to the point of minimal validation error rather than the point of minimal training error, it is typically implemented by saving the model state at each epoch and restoring the saved state after training halts, and the patience and improvement\u2011threshold hyperparameters are chosen based on the expected variance of the validation metric and the computational budget"
+    },
+    {
+        "question": "Ensemble Algorithms",
+        "answer": "Ensemble algorithms are a class of methods that, by integrating the predictions of two or more diverse base learners trained on the same or on different training subsets, feature subspaces, or algorithmic families, through defined combination rules such as voting, averaging, or stacking, achieve predictive performance that is at least as good as the best constituent model while reducing variance, mitigating overfitting, and improving robustness to data noise, and they may be homogeneous (using identical learning algorithms) or heterogeneous (combining different algorithm families), and they are characterized precisely by the necessary and sufficient condition that their output is derived from a collective decision process rather than a single model's inference"
+    },
+    {
+        "question": "Ensemble Learning",
+        "answer": "Ensemble learning is a method that! combines multiple predictive models to produce a single aggregated prediction, whereby the combined model yields improved generalization performance relative to any individual constituent model, and the improvement is achieved through diversity among base learners and a defined aggregation rule such as averaging or voting"
+    },
+    {
+        "question": "Ensemble Methods",
+        "answer": "Ensemble methods are predictive modeling techniques that combine the predictions of two or more diverse base learners through aggregating functions such as voting, averaging, or weighted boosting to achieve higher accuracy and robustness than any individual learner, where the ensemble\u2019s performance improvement is both necessary and sufficient given the diversity and complementary error patterns of its constituent models"
+    },
+    {
+        "question": "Bagging",
+        "answer": "Bagging is an ensemble learning technique that constructs multiple instances of a base learner on independently drawn bootstrap-replicated training subsets and combines their outputs by majority vote (classification) or averaging (regression) to reduce variance"
+    },
+    {
+        "question": "Boosting",
+        "answer": "Boosting is an ensemble learning technique that sequentially trains a series of weak learners, each of which is constructed to focus on the training instances mispredicted by its predecessors, and then aggregates their predictions through a weighted vote or sum such that the final model achieves lower bias and variance than any individual weak learner, a process that is both necessary and sufficient for converting weak learners into a strong learner"
+    },
+    {
+        "question": "Ensembles (Bagging).",
+        "answer": "Bagging (bootstrap aggregating) is an ensemble method that constructs multiple versions of a base learner on bootstrap\u2011sampled subsets of the training data and combines their predictions by averaging (for regression) or majority voting (for classification), thereby reducing variance and improving predictive stability provided the individual learners are unstable"
+    },
+    {
+        "question": "Ensembles (Boosting).",
+        "answer": "Ensembles (Boosting) are a class of ensemble methods that sequentially train weak learners, each focusing on instances mispredicted by its predecessors, and combine them by weighted voting to produce a strong learner, where the weight of each learner is determined by its error rate"
+    },
+    {
+        "question": "Ensembles (Stacking).",
+        "answer": "Stacking is an ensemble method that combines multiple heterogeneous base learners by training a meta\u2011learner on their cross\u2011validated predictions to produce a final prediction, where the meta\u2011learner\u2019s input consists exclusively of these base predictions and the process is iteratively defined to ensure no information leakage"
+    },
+    {
+        "question": "Ensembles (Voting).",
+        "answer": "Voting ensembles are a class of ensemble methods that combine the predictions of two or more distinct base models by applying a deterministic aggregation rule\u2014typically majority voting for classification or averaging for regression\u2014such that the final output is selected if and only if it satisfies the aggregation criterion across all constituent model predictions"
+    },
+    {
+        "question": "Ensembles.",
+        "answer": "Ensembles are a set of diverse, independently trained models whose outputs are aggregated by a defined rule to produce a single prediction that achieves lower error than any individual model"
+    },
+    {
+        "question": "Epoch",
+        "answer": "An epoch is a training iteration that constitutes a complete forward and backward pass through the entire labeled dataset, updating model parameters once per batch, and is repeated until convergence criteria are met"
+    },
+    {
+        "question": "Euclidean Distance",
+        "answer": "Euclidean distance is a metric that quantifies the straight-line distance between two points in a real-valued feature space by computing the square root of the sum of the squared differences of corresponding coordinate values, satisfying non\u2011negativity, identity, symmetry, and triangle inequality properties"
+    },
+    {
+        "question": "Evolutionary Algorithms",
+        "answer": "Evolutionary algorithms are population\u2011based metaheuristic optimization methods that iteratively generate, evaluate, and select candidate models using biologically inspired operators\u2014such as selection, crossover, and mutation\u2014and a fitness function, thereby searching the hypothesis space until convergence criteria are met, which provides a necessary and sufficient mechanism for stochastic, global exploration and exploitation of model parameters"
+    },
+    {
+        "question": "Feature Engineering",
+        "answer": "Feature engineering is the systematic process of constructing, selecting, and transforming input variables (features) from raw data such that the resulting feature set is necessary and sufficient to enable a model to learn predictive patterns effectively"
+    },
+    {
+        "question": "Feature Importance",
+        "answer": "Feature importance is a model-agnostic evaluation metric that assigns a non\u2011negative weight to each input variable such that the set of weights is necessary and sufficient to rank variables by their contribution to a model's predictive performance, typically derived from changes in loss or impurity when the variable is perturbed or excluded"
+    },
+    {
+        "question": "Feature Scaling",
+        "answer": "Feature scaling is a data preprocessing technique that mathematically transforms numeric input variables to a common scale\u2014typically a specified range or unit variance\u2014such that the scaling function is applied consistently to both training and future inference data, and this condition is both necessary and sufficient for mitigating magnitude disparities among features"
+    },
+    {
+        "question": "Features",
+        "answer": "Features are attributes or variables that quantitatively represent measurable properties or derived transformations of raw data and serve as the input information upon which learning algorithms train models, providing the necessary and sufficient basis for pattern discovery"
+    },
+    {
+        "question": "Generalization",
+        "answer": "Generalization is the ability of a trained model (the genus) to achieve low predictive error on previously unseen data drawn from the same distribution as the training set (the differentia), which is necessary and sufficient for the model to be considered successful beyond memorization"
+    },
+    {
+        "question": "Generative Adversarial Networks (GANs)",
+        "answer": "A Generative Adversarial Network (GAN) is a deep generative model that consists of a generator network and a discriminator network trained simultaneously in a minimax game where the generator produces data attempts to mimic the true data distribution and the discriminator attempts to distinguish real from generated samples, and the system reaches equilibrium when the discriminator\u2019s optimal accuracy equals random guessing"
+    },
+    {
+        "question": "Gradient Descent",
+        "answer": "Gradient descent is an iterative optimization algorithm that updates model parameters by moving them a step proportionally opposite to the gradient of a differentiable loss function with respect to those parameters, thereby seeking a local minimum"
+    },
+    {
+        "question": "Graphics Processing Unit (GPU)",
+        "answer": "A Graphics Processing Unit (GPU) is a parallel processor that possesses a large number of arithmetic cores, high memory bandwidth, and an instruction set optimized for matrix and tensor operations, such that it can execute the massive parallel computations required by training and inference of neural networks"
+    },
+    {
+        "question": "Grid Search",
+        "answer": "Grid search is a hyperparameter optimization method that exhaustively evaluates every combination of a predefined discrete set of hyperparameter values using a specified performance estimator (e.g., cross\u2011validation) to select the configuration that maximizes the target metric"
+    },
+    {
+        "question": "Hamming Distance",
+        "answer": "Hamming distance is a metric that, for any pair of equal\u2011length binary or categorical feature vectors, returns the exact count of positions where the corresponding components differ, providing a necessary\u2011and\u2011sufficient measure of disagreement between the vectors"
+    },
+    {
+        "question": "Hessian Matrix",
+        "answer": "The Hessian matrix is a symmetric square matrix that constitutes the second-order partial derivatives of a scalar loss function with respect to each pair of model parameters, providing a necessary and sufficient representation of the local curvature of the loss surface for optimization and uncertainty estimation"
+    },
+    {
+        "question": "Hierarchical Clustering",
+        "answer": "Hierarchical clustering is a clustering algorithm that iteratively merges (agglomerative) or splits (divisive) data points based on a chosen distance metric to construct a tree\u2011structured dendrogram representing nested groupings at multiple levels, and the algorithm terminates when a specified linkage criterion or number of clusters is satisfied, thereby providing a necessary and sufficient representation of the data's multiscale similarity structure"
+    },
+    {
+        "question": "Human in the Loop",
+        "answer": "A Human-in-the-Loop system is a learning paradigm that integrates a human operator as an essential decision-making component who provides labeled data, corrective feedback, or model adjustments during training, validation, or deployment, such that the system\u2019s performance depends on both algorithmic computation and real-time human input, and the loop is closed only when the human\u2019s contributions satisfy predefined quality or safety criteria"
+    },
+    {
+        "question": "Hyperparameter Tuning",
+        "answer": "Hyperparameter tuning is the systematic optimization of non\u2011learnable model configuration parameters, performed prior to training, that selects values which minimize validation error according to a defined search strategy and evaluation metric"
+    },
+    {
+        "question": "Hyperparameters",
+        "answer": "Hyperparameters are configuration variables that are set before training and are not updated by the learning algorithm, thereby controlling model architecture, optimization procedure, and regularization strength"
+    },
+    {
+        "question": "Imbalanced Data",
+        "answer": "Imbalanced data is a dataset class that contains a disproportionate distribution of samples across target categories such that the minority class(es) represent insufficient instances relative to majority class(es), making the learning algorithm\u2019s performance biased toward the majority unless corrective measures are applied"
+    },
+    {
+        "question": "Inductive Bias",
+        "answer": "Inductive bias is a set of assumptions that a learning algorithm imposes on the hypothesis space, necessary and sufficient to prefer some hypotheses over others when generalizing from finite training data"
+    },
+    {
+        "question": "Inference",
+        "answer": "Inference is the computational process of applying a trained model to new, unseen data to generate predictions or decisions, requiring that the model\u2019s parameters remain fixed and that the operation be performed without further parameter updates, thereby extracting the learned mappings for practical use"
+    },
+    {
+        "question": "Information Extraction",
+        "answer": "Information extraction is a task that necessarily transforms unstructured textual input into a structured representation of entities, relations, and events by learning patterns from annotated data, and this transformation is sufficient to support downstream reasoning or retrieval"
+    },
+    {
+        "question": "Jaccard Similarity",
+        "answer": "Jaccard similarity is a distance metric that quantifies the similarity between two finite sets by dividing the cardinality of their intersection by the cardinality of their union, providing a necessary and sufficient condition for set overlap measurement in binary or categorical feature spaces"
+    },
+    {
+        "question": "Jacobian Matrix",
+        "answer": "A Jacobian matrix is a rectangular array that contains all first\u2011order partial derivatives of a vector\u2011valued model output with respect to its input parameters, providing the necessary and sufficient condition for locally linearizing the model and enabling gradient\u2011based optimization and sensitivity analysis"
+    },
+    {
+        "question": "Joint Probability",
+        "answer": "Joint probability is a probability distribution that assigns to each combination of values of two or more random variables the probability that they simultaneously occur, satisfying non\u2011negativity, normalization, and additive consistency across the variables"
+    },
+    {
+        "question": "Jupyter Notebook",
+        "answer": "A Jupyter Notebook is an open-source web-based interactive computational environment that combines executable code cells (typically Python), markdown narrative, inline visualizations, version-controlled notebook files (.ipynb), multi-kernel language support, interactive widgets for real-time parameter adjustment, cell-level execution order tracking, rich media output (plots, tables, audio), and seamless integration with common machine-learning libraries such as TensorFlow, PyTorch, and scikit-learn, supports export to static formats (HTML, PDF) and execution on remote compute clusters via JupyterHub, thereby providing the necessary and sufficient interface for developing, testing, documenting, and reproducing models, data preprocessing, hyperparameter tuning, and evaluation workflows within a single portable, shareable document"
+    },
+    {
+        "question": "K Nearest Neighbors (KNN)",
+        "answer": "K Nearest Neighbors (KNN) is a supervised instance\u2011based classification algorithm that predicts the label of a query instance if and only if the majority of its K closest training instances\u2014determined by a chosen distance metric in the feature space\u2014share that label, where K is a user\u2011specified positive integer and no explicit model parameters are learned"
+    },
+    {
+        "question": "K-Means",
+        "answer": "K-Means is a clustering algorithm that partitions a dataset into a pre\u2011specified number k of clusters by iteratively assigning each observation to the nearest centroid and recomputing each centroid as the arithmetic mean of its assigned observations, thereby minimizing total within\u2011cluster sum of squares"
+    },
+    {
+        "question": "Knowledge Graphs",
+        "answer": "A knowledge graph is a graph-structured representation that encodes entities as nodes and typed semantic relationships as labeled edges, incorporates an explicit ontology or schema defining entity and relation types, and enables both logical inference and data-driven embedding learning over the same structure"
+    },
+    {
+        "question": "Knowledge Transfer",
+        "answer": "Knowledge transfer is a technique that enables a model trained on a source task to improve performance on a target task by reusing learned representations, parameters, or predictions if and only if the source and target domains share sufficient structural or statistical similarity"
+    },
+    {
+        "question": "L1 and L2 Regularization",
+        "answer": "L1 and L2 regularization are penalty-based regularization techniques that, respectively, add a term proportional to the L1 norm (sum of absolute parameter values) or the L2 norm (sum of squared parameter values) of model weights to the objective function, thereby constraining model complexity; the L1 penalty yields sparse solutions, while the L2 penalty yields weight decay"
+    },
+    {
+        "question": "Label Encoding",
+        "answer": "Label encoding is a preprocessing technique that transforms categorical target or feature values into integer codes by assigning each distinct category a unique numeric identifier, thereby providing a bijective mapping that preserves categorical distinctness while enabling algorithms to consume the data"
+    },
+    {
+        "question": "Language Models",
+        "answer": "Language models are probabilistic models that assign likelihoods to sequences of tokens based on patterns learned from data, thereby enabling prediction or generation of text"
+    },
+    {
+        "question": "Learning Rate",
+        "answer": "The learning rate is a scalar hyperparameter that determines the magnitude of parameter updates during iterative optimization, ensuring sufficient progress toward minimizing the loss function while preventing divergence"
+    },
+    {
+        "question": "Linear Regression",
+        "answer": "Linear regression is a supervised learning algorithm that models the relationship between a continuous target variable and one or more predictor variables by fitting a linear function whose coefficients are determined to minimize the sum of squared residuals, providing a necessary and sufficient condition for optimal ordinary least\u2011squares estimation under assumptions of linearity, independence, homoscedasticity, and normality of errors"
+    },
+    {
+        "question": "Logistic Regression",
+        "answer": "Logistic regression is a supervised classification algorithm that models the probability of a binary outcome as a logistic (sigmoid) function of a linear combination of input features, thereby providing a necessary and sufficient mapping from feature vectors to class probabilities for inference and parameter estimation via maximum likelihood"
+    },
+    {
+        "question": "Long Short-Term Memory (LSTM)",
+        "answer": "A Long Short-Term Memory (LSTM) is a recurrent neural network architecture that incorporates gated memory cells to enable necessary-and-sufficient learning of long-range temporal dependencies while preventing gradient vanishing and exploding"
+    },
+    {
+        "question": "Loss Function",
+        "answer": "A loss function is a non\u2011negative scalar\u2011valued function that maps a model\u2019s predicted outputs and the corresponding ground\u2011truth targets to a single quantity whose minimization is necessary and sufficient for guiding parameter optimization toward better predictive performance"
+    },
+    {
+        "question": "Machine Learning",
+        "answer": "Machine learning is a subfield of artificial intelligence that develops algorithms which automatically infer statistical patterns from data to construct, train, and evaluate predictive models, satisfying necessary-and-sufficient criteria of data-driven performance optimization"
+    },
+    {
+        "question": "Manhattan Distance",
+        "answer": "Manhattan distance is a distance metric that computes the L1 norm between two vectors by summing the absolute differences of their corresponding components, providing a necessary and sufficient measure of separation based on axis-aligned movement"
+    },
+    {
+        "question": "Markov Chain",
+        "answer": "A Markov chain is a stochastic process that consists of a sequence of random variables such that the conditional probability distribution of the next variable depends only on the current variable (the Markov property) and the transition probabilities are time\u2011invariant, which together are necessary and sufficient for the process to be a Markov chain"
+    },
+    {
+        "question": "Matrix Factorization",
+        "answer": "Matrix factorization is a dimensionality\u2011reduction technique that decomposes a given data matrix\u202fM into the product of two lower\u2011dimensional factor matrices\u202fU and\u202fV such that\u202fU\u202fV\u1d40 approximates\u202fM under a specified loss function (typically the squared reconstruction error), and the factor matrices satisfy explicit constraints\u2014such as non\u2011negativity, orthogonality, or sparsity\u2014and optional regularization terms that are necessary and sufficient for capturing latent structure, enabling efficient parameter estimation through optimization algorithms (e.g., gradient descent, alternating least squares), and supporting scalable inference and prediction on high\u2011dimensional datasets, and the optimization seeks a stationary point that minimizes the objective while respecting the constraints, and the resulting low\u2011rank representation can be stored compactly, reducing memory usage and computational cost for downstream tasks"
+    },
+    {
+        "question": "Matrix Multiplication",
+        "answer": "Matrix multiplication is a linear algebra operation that takes two compatible matrices A \u2208 \u211d^{m\u00d7n} and B \u2208 \u211d^{n\u00d7p} and produces a matrix C \u2208 \u211d^{m\u00d7p} whose entry c_{ij} equals the sum over k=1 to n of a_{ik} multiplied by b_{kj}, thereby enabling linear transformations, gradient propagation, and parameter updates"
+    },
+    {
+        "question": "Mean Squared Error",
+        "answer": "Mean Squared Error (MSE) is a loss function that quantifies model accuracy by computing the average of the squared differences between each predicted value and its corresponding true label, providing a necessary and sufficient scalar measure of prediction error for regression tasks"
+    },
+    {
+        "question": "Measures of Central Tendency",
+        "answer": "Measures of central tendency are statistical summary metrics that quantify the typical value of a set of numeric predictions, feature values, or model outputs, and are defined as the arithmetic mean, median, or mode, providing necessary and sufficient information to locate the distribution\u2019s center for performance evaluation, bias detection, and data preprocessing"
+    },
+    {
+        "question": "Missing Data",
+        "answer": "Missing data is a dataset condition that occurs when at least one feature value for at least one training or test instance is not observed, rendering the corresponding entry undefined and requiring explicit handling to avoid biased or invalid model outcomes"
+    },
+    {
+        "question": "Missing Values",
+        "answer": "Missing values are data entries within a dataset that are absent or undefined, constituting a type of incomplete data where the absence is recorded as null, NaN, or a placeholder and must be identified and handled to prevent bias or errors in model training and evaluation"
+    },
+    {
+        "question": "Model Complexity",
+        "answer": "Model complexity is a quantitative attribute of a learning algorithm that, necessary and sufficient for describing its capacity, is defined by the number of adjustable parameters, the depth or breadth of its architecture, and the richness of its hypothesis space, collectively determining the model\u2019s ability to fit training data and generalize to unseen instances"
+    },
+    {
+        "question": "Model Evaluation",
+        "answer": "Model evaluation is the systematic process that quantifies a trained model's predictive performance on designated data using necessary-and-sufficient metrics, validation protocols, and statistical tests to determine whether it meets predefined criteria for generalization"
+    },
+    {
+        "question": "Model Selection",
+        "answer": "Model selection is the process of choosing, from a predefined set of candidate algorithms and associated hyperparameter configurations, the model that optimally balances predictive accuracy and complexity on validation data, thereby satisfying the necessary and sufficient condition of minimizing expected generalization error under given resource constraints"
+    },
+    {
+        "question": "Multiclass Classification",
+        "answer": "Multiclass classification is a supervised learning task that assigns each input instance to exactly one of three or more mutually exclusive class labels, extending binary classification by requiring a model to predict multiple possible categories rather than a single dichotomous outcome"
+    },
+    {
+        "question": "Naive Bayes Classifier",
+        "answer": "A Naive Bayes classifier is a probabilistic supervised learning algorithm that assigns class labels by applying Bayes' theorem with the assumption that all feature variables are conditionally independent given the class, and that the class posterior is proportional to the product of the prior class probability and the likelihoods of each feature"
+    },
+    {
+        "question": "Naive Bayes",
+        "answer": "Naive Bayes is a probabilistic classifier that applies Bayes\u2019 theorem under the assumption of conditional independence among features, yielding posterior class probabilities that are proportional to the product of individual feature likelihoods and the prior class probability, and assigns each instance to the class with maximum posterior probability"
+    },
+    {
+        "question": "Natural Language Processing (NLP)",
+        "answer": "Natural language processing (NLP) is a subfield that comprises all necessary and sufficient computational techniques for representing, learning from, and manipulating human language data\u2014including text and speech\u2014by employing statistical models, neural architectures, and algorithmic pipelines that jointly encode linguistic structure, semantic meaning, and contextual usage to enable tasks such as tokenization, part\u2011of\u2011speech tagging, syntactic parsing, machine translation, summarization, and sentiment classification within a unified probabilistic framework, also encompassing language modeling, information retrieval, question answering, and discourse analysis, requiring evaluation against benchmark corpora using established metrics such as BLEU, ROUGE, and F1\u2011score, and additionally demanding that methods handle multilingual, domain\u2011specific, and low\u2011resource scenarios through transfer learning and data augmentation"
+    },
+    {
+        "question": "Nearest Neighbor Search",
+        "answer": "Nearest neighbor search is an algorithmic problem that, given a query point and a dataset of points in a metric space, retrieves the point(s) whose distance to the query is minimal according to a specified distance function, thereby providing a necessary and sufficient method for identifying the closest dataset elements under that metric"
+    },
+    {
+        "question": "Neural Networks and Deep Learning",
+        "answer": "Neural networks are parametric function approximators composed of interconnected layers of artificial neurons that transform inputs through weighted sums and nonlinear activations, and deep learning specifically refers to neural network architectures with multiple hidden layers (often more than three) trained via gradient-based optimization on large datasets to automatically learn hierarchical feature representations"
+    },
+    {
+        "question": "Neural Networks",
+        "answer": "A neural network is a computational model that consists of layers of interconnected artificial neurons whose weighted connections are adjusted during training to map inputs to outputs via nonlinear activation functions, thereby enabling the model to learn hierarchical representations of data"
+    },
+    {
+        "question": "Normal Distribution",
+        "answer": "A normal distribution is a continuous probability distribution that belongs to the exponential family, characterized by a symmetric bell-shaped density function defined entirely by its mean (\u03bc) and variance (\u03c3\u00b2), such that the probability density at any value x is given by the formula (1/(\u03c3\u221a(2\u03c0)))\u00b7exp(-(x\u2212\u03bc)\u00b2/(2\u03c3\u00b2)), and it satisfies the necessary and sufficient condition of being the maximum entropy distribution for a given mean and variance"
+    },
+    {
+        "question": "Normalization",
+        "answer": "Normalization is a data preprocessing technique that rescales each feature to a common scale, typically by applying a necessary-and-sufficient transformation such as min\u2011max scaling to a fixed interval or z\u2011score standardization to zero mean and unit variance, thereby ensuring that all numeric inputs contribute proportionately to model training and inference"
+    },
+    {
+        "question": "Object Detection",
+        "answer": "Object detection is a supervised computer vision task that jointly localizes and classifies each instance of predefined object categories within an image by outputting bounding boxes and corresponding confidence scores, requiring a model to learn discriminative visual features and spatial priors from annotated training data, and is evaluated using metrics such as mean average precision"
+    },
+    {
+        "question": "Observations",
+        "answer": "Observations are the individual data records that constitute the input dataset, each comprising a finite set of attribute\u2011value pairs (features) and, when supervised, an associated target label, and they serve as the necessary and sufficient empirical units from which models infer patterns, evaluate performance, and generalize to unseen instances, with the distinguishing property that observations are assumed to be drawn from an underlying probability distribution relevant to the task, and are typically represented as rows in a structured table or tensors in a tensor library, with each feature possibly continuous, categorical, or ordinal, and each observation may be weighted or duplicated to reflect sampling bias"
+    },
+    {
+        "question": "One-Hot Encoding",
+        "answer": "One-hot encoding is a data preprocessing technique that transforms a categorical variable with *k* distinct categories into a binary vector of length *k* such that exactly one component is set to one (representing the observed category) and all other components are set to zero, providing a necessary and sufficient representation for algorithms that require numerical input without implying ordinal relationships"
+    },
+    {
+        "question": "Optimization",
+        "answer": "Optimization is an algorithmic process that systematically adjusts model parameters to find values that minimize (or maximize) a specified loss (or objective) function while satisfying any imposed constraints, thereby ensuring that the resulting model achieves the best possible predictive performance given the training data and model architecture, it typically employs gradient\u2011based or combinatorial techniques, evaluates convergence through predefined tolerances, and may incorporate regularization terms to prevent overfitting, all within the computational limits of the practitioner\u2019s hardware, furthermore, the choice of objective formulation, learning rate schedule, and stopping criteria directly influences solution quality and training efficiency, and may be monitored via validation metrics to detect divergence"
+    },
+    {
+        "question": "Outliers",
+        "answer": "Outliers are data points that belong to the broader class of observations but, by a necessary-and-sufficient condition of exhibiting a statistically significant deviation from the distribution or predictive model fitted to the majority of the data, are identified as unlikely under that model and potentially indicative of noise, rare events, or model misspecification"
+    },
+    {
+        "question": "Overfitting",
+        "answer": "Overfitting is a model training outcome that memorizes noise in the training data, achieving low training error but high generalization error on unseen data, such that performance on new data is significantly worse than on the training set"
+    },
+    {
+        "question": "Oversampling",
+        "answer": "Oversampling is a data preprocessing technique that artificially increases the number of minority\u2011class instances\u2014either by exact duplication or by generating synthetic samples\u2014so that the class distribution becomes balanced, which is necessary and sufficient for reducing bias toward majority classes during model training"
+    },
+    {
+        "question": "P-value",
+        "answer": "A p-value is a statistical significance metric that quantifies the probability, under the null hypothesis that a model's performance difference is due to random chance, of observing test results at least as extreme as those obtained"
+    },
+    {
+        "question": "Padding",
+        "answer": "Padding is a preprocessing operation that adds a defined number of values, typically zeros, to the borders of input tensors or sequences in order to standardize dimensions for batch processing or to maintain spatial dimensions after convolutional transformations, and it is applied only when the original size does not meet the required shape"
+    },
+    {
+        "question": "Parameters",
+        "answer": "Parameters are the trainable variables of a model that are adjusted by an optimization algorithm during training to minimize a loss function, and whose values are stored within the model architecture, distinguishing them from hyperparameters that are set prior to training and not learned from data"
+    },
+    {
+        "question": "Perceptron",
+        "answer": "A perceptron is a single-layer artificial neural network unit that computes a weighted sum of its input features, adds a bias term, and outputs a binary class label by applying a step activation function, with learning achieved through adjusting weights via the perceptron learning rule that iteratively minimizes classification error on linearly separable data"
+    },
+    {
+        "question": "Pooling",
+        "answer": "Pooling is a deterministic downsampling operation in convolutional neural networks that aggregates locally contiguous neuron activations by applying a predefined reduction function\u2014commonly maximum or average\u2014to each non\u2011overlapping (or optionally overlapping) spatial region, thereby producing a feature map of reduced dimensionality that retains the most salient information, ensures translational invariance, and reduces computational load and overfitting risk, it is parameter\u2011free, uses a stride equal to the region size (or a specified stride), and can be applied independently per channel, producing outputs that feed subsequent layers while preserving channel count, by compressing spatial resolution pooling also mitigates sensitivity to small input translations and reduces the number of parameters in later fully connected layers, thereby contributing to regularization"
+    },
+    {
+        "question": "Pre-training",
+        "answer": "Pre\u2011training is a phase of model training that initializes a model\u2019s parameters on a large generic dataset using an unsupervised or self\u2011supervised objective so that the learned representations are broadly useful and can be fine\u2011tuned on a downstream task with comparatively little labeled data, providing a necessary and sufficient condition that the model has first absorbed general patterns before task\u2011specific adaptation"
+    },
+    {
+        "question": "Precision",
+        "answer": "Precision is a classification evaluation metric that quantifies the proportion of positive predictions that are correct, i.e., the number of true positive outcomes divided by the sum of true positive and false positive outcomes, providing a necessary-and-sufficient condition for assessing a model\u2019s exactness in identifying relevant instances among all instances it labels as positive"
+    },
+    {
+        "question": "Principal Component Analysis (PCA)",
+        "answer": "Principal Component Analysis (PCA) is a linear dimensionality-reduction technique that transforms a set of possibly correlated variables into a smaller set of orthogonal components ordered by decreasing variance, thereby preserving maximal data variance while reducing dimensionality"
+    },
+    {
+        "question": "Quantum Machine Learning",
+        "answer": "Quantum machine learning is a subfield that employs quantum computational primitives\u2014such as superposition, entanglement, and quantum interference\u2014to implement learning algorithms in a way that a quantum processor is required for at least one computational step, and that this quantum step yields a provable or empirically demonstrated advantage in training speed, model capacity, or inference accuracy over purely classical methods"
+    },
+    {
+        "question": "R-squared",
+        "answer": "R-squared is a regression performance metric that quantifies the proportion of variance in the observed target that is explained by the model predictions, defined as one minus the residual sum of squares divided by the total sum of squares"
+    },
+    {
+        "question": "Random Forests",
+        "answer": "A Random Forest is an ensemble learning method that constructs a multitude of decision tree classifiers on bootstrapped subsets of the training data and aggregates their predictions by majority voting (for classification) or averaging (for regression), thereby reducing variance and improving generalization compared to any single decision tree"
+    },
+    {
+        "question": "ReLU Function (Rectified Linear Unit)",
+        "answer": "The Rectified Linear Unit (ReLU) function is an activation function that maps any real\u2011valued input to zero if the input is negative and to the input itself otherwise, providing a piecewise linear, non\u2011saturating transformation that is necessary and sufficient for introducing non\u2011linearity while preserving gradient flow for positive activations"
+    },
+    {
+        "question": "Recall",
+        "answer": "Recall is a performance metric (genus: evaluation measure) that quantifies the proportion of actual positive instances that are correctly identified by a classifier, defined as the number of true positives divided by the sum of true positives and false negatives, and it is necessary and sufficient for assessing a model\u2019s ability to retrieve relevant items in contexts where missing positives is costly, it is computed per class in multiclass or multilabel settings, and when averaged (macro or micro) it provides a single figure of merit, and it is particularly relevant when the cost of false negatives outweighs that of false positives"
+    },
+    {
+        "question": "Recurrent Neural Network (RNN)",
+        "answer": "A recurrent neural network (RNN) is a type of artificial neural network that processes sequential data by maintaining a hidden state through recurrent connections, such that each output is a function of the current input and the aggregated information from all preceding inputs"
+    },
+    {
+        "question": "Regression",
+        "answer": "Regression is a supervised learning task that models a continuous-valued target variable as a deterministic function of input features, learned by minimizing a suitable error metric (e.g., mean squared error) to enable prediction of unseen numeric outcomes"
+    },
+    {
+        "question": "Regression Analysis",
+        "answer": "Regression analysis is a supervised learning method that models the functional relationship between a dependent numerical variable and one or more independent variables by fitting a parameterized function to minimize a loss metric, thereby enabling prediction and inference about continuous outcomes"
+    },
+    {
+        "question": "Regularization",
+        "answer": "Regularization is a technique that adds a penalty term to the objective function such that model complexity is constrained, which is necessary and sufficient to reduce overfitting by encouraging simpler parameter configurations"
+    },
+    {
+        "question": "Reinforcement Learning",
+        "answer": "Reinforcement learning is a class of algorithms that learn optimal sequential decision policies by maximizing cumulative expected reward through trial-and-error interaction with an environment, where the learner (agent) selects actions based on observed states, receives scalar feedback (reward) from the environment, updates a value or policy function using necessary-and-sufficient conditions of the Markov decision process formalism, incorporates an exploration-exploitation trade-off via strategies such as \u03b5-greedy or softmax, employs a discount factor to prioritize immediate over distant rewards, and optimizes either a value function (e.g., Q-function) or directly parameterizes the policy until convergence to an optimal or near-optimal policy"
+    },
+    {
+        "question": "Root Mean Square Error",
+        "answer": "Root mean square error (RMSE) is a loss metric that quantifies the average magnitude of prediction errors by taking the square root of the mean of the squared differences between each predicted value and the corresponding true value, thereby producing a non\u2011negative scalar that increases proportionally with error magnitude"
+    },
+    {
+        "question": "Sentiment Analysis",
+        "answer": "Sentiment analysis is a text classification task that automatically determines the affective polarity (positive, negative, or neutral) of a given textual input based on learned linguistic and contextual features, using models that map input representations to discrete sentiment labels"
+    },
+    {
+        "question": "Softmax Function",
+        "answer": "The softmax function is a differentiable mapping that converts any finite-dimensional real-valued vector into a categorical probability distribution by exponentiating each component and normalizing each exponent by the sum of all exponents, such that the output elements are non\u2011negative and sum to one, and this formulation is both necessary and sufficient for producing a valid probability simplex from arbitrary scores"
+    },
+    {
+        "question": "Stochastic Gradient Descent",
+        "answer": "Stochastic gradient descent is an iterative optimization algorithm that belongs to the class of gradient-based methods and distinguishes itself by estimating the loss gradient using a randomly sampled minibatch of training examples at each step, updating model parameters by moving them opposite this stochastic gradient scaled by a user\u2011defined learning rate, optionally incorporating momentum or adaptive learning\u2011rate schedules, thereby providing computational efficiency and enabling convergence on large\u2011scale data sets where exact gradient computation is infeasible, while preserving unbiasedness of the gradient estimate, allowing convergence under diminishing step sizes, and supporting parallelization across multiple processors or GPUs in practice"
+    },
+    {
+        "question": "Structured Data",
+        "answer": "Structured data is a type of data that conforms to a predefined schema\u2014such as relational tables, hierarchical trees, or graph edges\u2014where each record consists of explicitly named fields with fixed data types, deterministic relationships, and consistent ordering, thereby providing necessary and sufficient conditions for algorithms to directly index, query, and perform deterministic transformations without requiring feature extraction from raw unstructured representations, enabling reproducible preprocessing pipelines, supporting batch and streaming ingestion, and allowing direct mapping of attributes to model parameters, while distinguishing it from unstructured data that lacks explicit field definitions, and it also presumes that metadata describing column semantics and constraints is available for validation and normalization"
+    },
+    {
+        "question": "Supervised Learning",
+        "answer": "Supervised learning is a class of algorithms that construct predictive models by mapping input feature vectors to output targets using a labeled training dataset, such that the learned mapping minimizes a specified loss function on the training data and generalizes to unseen instances under the assumption that training and test data are drawn from the same distribution"
+    },
+    {
+        "question": "Support Vector Machine (SVM)",
+        "answer": "A Support Vector Machine (SVM) is a supervised learning algorithm that constructs a decision boundary by solving a convex quadratic optimization problem to maximize the margin between classes using a subset of training points called support vectors, optionally mapping data into higher\u2011dimensional spaces via kernel functions to handle non\u2011linear separability"
+    },
+    {
+        "question": "T-test",
+        "answer": "A t-test is a statistical hypothesis test that determines whether the means of two sets of observed values differ significantly, assuming the data are independent, approximately normally distributed, and have equal variances (for the standard independent two-sample version)"
+    },
+    {
+        "question": "Tanh Function",
+        "answer": "The hyperbolic tangent (tanh) function is an activation function that maps every real\u2011valued input\u202fx to (e^{x}\u202f\u2212\u202fe^{\u2212x})\u202f/\u202f(e^{x}\u202f+\u202fe^{\u2212x}), producing an output strictly between\u202f\u22121 and\u202f+1, is odd, continuously differentiable, has the necessary\u2011and\u2011sufficient property that its derivative equals 1\u202f\u2212\u202ftanh^{2}(x), which makes it zero\u2011centered and suitable for back\u2011propagation in deep neural networks, its bounded output prevents exploding activations, its monotonic increase guarantees gradient sign consistency, and its symmetric shape around zero reduces bias shift during training, thereby improving convergence speed compared with uncentered sigmoidal functions, because the derivative can be expressed directly in terms of the output, back\u2011propagation can compute gradients efficiently without additional exponential calculations"
+    },
+    {
+        "question": "Target Variable",
+        "answer": "A target variable is the output variable that a model is trained to predict, representing the dependent variable whose values are known for training instances and unknown for new instances, and whose estimation constitutes the learning objective"
+    },
+    {
+        "question": "Time Series Analysis",
+        "answer": "Time series analysis is a methodological subclass of predictive modelling that systematically extracts temporal dependencies, trends, seasonal patterns, and autocorrelations from sequentially indexed data points to build models whose necessary and sufficient condition for applicability is that observations are ordered in time and that the model leverages this ordering to forecast future values or infer underlying dynamics"
+    },
+    {
+        "question": "Train Test Split",
+        "answer": "A train\u2011test split is a data partitioning procedure that divides a labeled dataset into a training subset used to fit a model and a testing subset used solely to evaluate the model\u2019s predictive performance on unseen data, ensuring that the split is mutually exclusive and typically random or stratified to preserve class distributions"
+    },
+    {
+        "question": "Training",
+        "answer": "Training is the iterative optimization process that adjusts a model\u2019s parameters using a labeled dataset so that the model\u2019s predictive function minimizes a defined loss over the training data and generalizes to unseen data"
+    },
+    {
+        "question": "Transfer Learning",
+        "answer": "Transfer learning is a technique that enables a model trained on a source task to improve performance on a related target task by reusing or adapting learned representations, provided that the source and target share sufficient feature space or task structure"
+    },
+    {
+        "question": "Transformer Model",
+        "answer": "A Transformer model is a neural network architecture that processes sequential data by employing self\u2011attention mechanisms to compute pairwise token interactions in parallel, eschewing recurrence or convolution, and stacking multiple encoder and/or decoder layers with positional encodings, layer normalization, and feed\u2011forward sub\u2011layers, thereby providing necessary and sufficient conditions for capturing long\u2011range dependencies, enabling efficient training on large corpora, and supporting tasks such as language modeling, translation, and multimodal representation learning; it also integrates residual connections for gradient flow, uses learned or sinusoidal position embeddings, and can be scaled by increasing depth, width, or attention heads to trade off compute for performance"
+    },
+    {
+        "question": "Truncation",
+        "answer": "Truncation is a preprocessing or regularization operation that replaces values exceeding a specified magnitude or length limit with a predetermined bound, thereby limiting the range of inputs, gradients, or model parameters"
+    },
+    {
+        "question": "Underfitting",
+        "answer": "Underfitting is a model training condition where the hypothesis class fails to capture the underlying patterns in the training data, resulting in high bias and poor performance on both training and unseen data"
+    },
+    {
+        "question": "Unstructured Data",
+        "answer": "Unstructured data is any data that does not conform to a fixed schema or relational model, consisting of raw text, images, audio, or video and requiring algorithmic feature extraction to become usable for learning tasks"
+    },
+    {
+        "question": "Unsupervised Learning",
+        "answer": "Unsupervised learning is a class of algorithms that infer latent structures from unlabeled data by optimizing criteria that capture intrinsic data regularities without relying on external supervision"
+    },
+    {
+        "question": "Vanishing Gradient",
+        "answer": "Vanishing gradient is a training pathology that arises in gradient-based optimization of deep neural networks when the successive chain rule multiplication of partial derivatives yields values that converge toward zero for parameters in early layers, thereby rendering weight updates arbitrarily small and preventing effective learning of those layers, this effect is amplified by activation functions with saturated regimes such as sigmoid or hyperbolic tangent, and by deep architectures that require many multiplicative Jacobian terms, so that the propagated error signal decays exponentially with depth, leading to stalled convergence for shallow parameters, consequently training may stall, requiring architectural or algorithmic remedies such as careful weight initialization, normalization layers, or alternative activation functions"
+    },
+    {
+        "question": "Variance",
+        "answer": "Variance is a statistical measure that quantifies the expected squared deviation of a model\u2019s predictions from their mean across different training data samples, providing a necessary-and-sufficient condition for assessing the model\u2019s sensitivity to data fluctuations and its contribution to overall generalization error"
+    },
+    {
+        "question": "Variational Autoencoder",
+        "answer": "A Variational Autoencoder is a generative neural network model that encodes input data into a continuous latent probability distribution via an encoder network and reconstructs data from samples of this distribution through a decoder network, trained by jointly maximizing the expected reconstruction likelihood and minimizing the Kullback\u2013Leibler divergence between the encoded distribution and a chosen prior, providing a necessary and sufficient framework for amortized variational inference"
+    }
+]
