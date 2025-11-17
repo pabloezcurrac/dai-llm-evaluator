@@ -5,20 +5,3 @@ torch>=2.2.0
 evaluate>=0.4.2
 rouge-score>=0.1.2
 sentencepiece>=0.1.99
-# --- Core app ---
-streamlit>=1.37.0
-pandas>=2.1.0
-requests>=2.31.0
-
-# --- Evaluation metrics ---
-evaluate>=0.4.2
-rouge-score>=0.1.2
-
-# --- Local HF LLM (only needed if you keep the Qwen/transformers path) ---
-transformers>=4.44.0
-huggingface_hub>=0.24.0
-tokenizers>=0.15.2
-torch>=2.2.0
-
-# --- OpenAI client (to satisfy `import openai`) ---
-openai>=1.40.0
