@@ -14,8 +14,13 @@ import random
 import textwrap
 
 import streamlit as st
-import evaluate  # make sure to install: pip install evaluate rouge_score
+import evaluate
+import pandas as pd
+import openai
 
+# Configure OpenAI using Streamlit secrets
+# In Streamlit Cloud, define OPENAI_API_KEY in "App settings" -> "Secrets"
+openai.api_key = st.secrets.get("OPENAI_API_KEY", None)
 
 # ===============================
 # 1. DATA LOADING
@@ -152,16 +157,26 @@ def evaluate_answer(reference: str, student_answer: str) -> dict:
 # ===============================
 
 LLM_SYSTEM_PROMPT = """
-You are an expert Machine Learning professor.
-The student is answering conceptual questions.
-Your task is to:
-1) Compare the student's answer with the reference answer.
-2) Briefly explain what is correct, what is missing, and what is wrong.
-3) Provide a numeric score from 0 to 100.
+You are an expert university-level Machine Learning professor.
 
-You MUST respond in valid JSON with the following keys:
-- "score": number from 0 to 100
-- "analysis": short textual explanation
+The student answers conceptual ML questions. You must:
+
+1. Compare the student's answer with the reference answer.
+2. Judge correctness, completeness, and clarity.
+3. Identify important missing or incorrect points.
+4. Produce a numeric score from 0 to 100, where:
+   - 90-100: Excellent, almost identical to reference.
+   - 70-89: Good, covers most key ideas with minor gaps.
+   - 40-69: Partial, some correct ideas but incomplete.
+   - 0-39: Poor, mostly incorrect or missing key ideas.
+
+You MUST respond ONLY in valid JSON with this structure:
+{
+  "score": <number 0-100>,
+  "analysis": "<short paragraph explaining strengths and weaknesses>",
+  "missing_points": ["point 1", "point 2", "..."]
+}
+Do NOT include any extra text outside the JSON.
 """
 
 
@@ -176,27 +191,66 @@ def build_llm_prompt(question: str, reference_answer: str, student_answer: str) 
 [STUDENT ANSWER]
 {student_answer}
 
-Now compare the student's answer to the reference and respond as requested.
+Compare the student's answer to the reference and respond following the instructions.
 """
 
 
 def call_llm_evaluator(prompt: str) -> dict:
     """
-    Stub for LLM-based evaluation.
-    - For the assignment, you can either:
-      (a) leave this stub with a dummy output, or
-      (b) replace it with a call to OpenAI / HuggingFace / Ollama.
+    Calls the OpenAI API to evaluate the student's answer.
+    Returns a dict with keys: score (float), analysis (str), missing_points (list).
+    If OPENAI_API_KEY is not set, falls back to a dummy response.
     """
-    # DUMMY implementation to keep the app running without an API:
-    # You can replace everything below with a real LLM call if you want.
-    dummy_response = {
-        "score": 75.0,
-        "analysis": (
-            "This is a placeholder LLM evaluation. "
-            "Replace 'call_llm_evaluator' with a real model call to use an actual LLM judge."
-        ),
-    }
-    return dummy_response
+    if openai.api_key is None:
+        # Fallback: keep app running without a key
+        return {
+            "score": 75.0,
+            "analysis": (
+                "LLM evaluator is not configured (no OPENAI_API_KEY). "
+                "This is a placeholder result."
+            ),
+            "missing_points": [],
+        }
+
+    try:
+        # Using Chat Completions API with JSON output
+        response = openai.ChatCompletion.create(
+            model="gpt-4.1-mini",  # or any available model in your account
+            messages=[
+                {"role": "system", "content": LLM_SYSTEM_PROMPT},
+                {"role": "user", "content": prompt},
+            ],
+            temperature=0.0,
+        )
+        content = response["choices"][0]["message"]["content"]
+        data = json.loads(content)
+
+        score = float(data.get("score", 0.0))
+        analysis = data.get("analysis", "")
+        missing_points = data.get("missing_points", [])
+
+        return {
+            "score": score,
+            "analysis": analysis,
+            "missing_points": missing_points,
+        }
+
+    except Exception as e:
+        # Robust fallback for any error in the API
+        return {
+            "score": 0.0,
+            "analysis": f"Error calling LLM evaluator: {e}",
+            "missing_points": [],
+        }
+
+
+def evaluate_answer_llm(question: str, reference: str, student_answer: str) -> dict:
+    """
+    Wrapper to build the prompt and call the LLM evaluator.
+    """
+    prompt = build_llm_prompt(question, reference, student_answer)
+    llm_response = call_llm_evaluator(prompt)
+    return llm_response
 
 
 def evaluate_answer_llm(question: str, reference: str, student_answer: str) -> dict:
@@ -347,11 +401,12 @@ if "last_eval_auto" in st.session_state:
     )
 
     # LLM-based evaluation
-    st.markdown("### 🧠 LLM-based Evaluation (Stub)")
+    st.markdown("### 🧠 LLM-based Evaluation (OpenAI Judge)")
     st.write(f"**LLM Score (0–100):** `{eval_llm['score']}`")
-    st.write(
-        textwrap.fill(eval_llm["analysis"], width=100)
-    )
+    st.write(textwrap.fill(eval_llm["analysis"], width=100))
+    if eval_llm.get("missing_points"):
+        st.write("**Key missing points (according to the LLM):**")
+        st.write("- " + "\n- ".join(eval_llm["missing_points"]))
 
     # Reference answer (optional)
     if show_reference:
