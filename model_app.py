@@ -3,11 +3,13 @@
 
 Streamlit app for ML Q&A evaluation:
 - Automatic evaluator: ROUGE-L + keyword coverage
-- LLM-based evaluator: Ollama local model (Llama 2 chat)
+- LLM-based evaluator: Hugging Face (Local FLAN-T5 or Hosted Inference API)
 
 Before running:
-  1) pip install streamlit evaluate rouge-score pandas requests
-  2) Start Ollama and pull model:  ollama pull llama2:7b-chat
+  1) pip install streamlit evaluate rouge-score pandas transformers huggingface_hub
+  2) (Optional) Add a secrets file for hosted mode:
+       In Streamlit: Settings -> Secrets -> add:
+         HF_TOKEN = "hf_xxx..."
   3) streamlit run model_app.py
 """
 
@@ -17,11 +19,19 @@ from collections import Counter
 import random
 import textwrap
 import re
-import requests
+import os
 
 import streamlit as st
 import evaluate
 import pandas as pd  # optional (kept for parity with prior code)
+
+# For local Transformers and for HF Hosted Inference API
+import torch
+from transformers import (
+    AutoTokenizer,
+    AutoModelForSeq2SeqLM,
+)
+from huggingface_hub import InferenceClient
 
 
 # ===============================
@@ -141,17 +151,25 @@ def evaluate_answer(reference: str, student_answer: str) -> dict:
 
 
 # ===============================
-# 3. LLM-BASED EVALUATOR (Ollama - Llama 2)
+# 3. LLM-BASED EVALUATOR (Hugging Face)
 # ===============================
 
-# Use an Ollama-served Llama 2 chat model
-# Pull first:  ollama pull llama2:7b-chat
-DEFAULT_OLLAMA_MODEL = "llama2:7b-chat"
+"""
+Two modes:
+  A) Local CPU model (no API key):
+     - google/flan-t5-base  (fast & light; good enough for JSON judging)
+  B) Hosted HF Inference API (requires HF_TOKEN in Streamlit secrets):
+     - default: meta-llama/Meta-Llama-3.1-8B-Instruct (stronger judge)
+"""
 
-SYSTEM_PROMPT = """
+LOCAL_MODEL_ID = "google/flan-t5-base"
+HOSTED_MODEL_ID_DEFAULT = "meta-llama/Meta-Llama-3.1-8B-Instruct"  # you can change in the UI
+
+SYSTEM_INSTRUCTIONS = """
 You are a rigorous and fair university-level Machine Learning professor.
 
-Compare the STUDENT_ANSWER to the REFERENCE_ANSWER and return STRICT JSON ONLY:
+Compare the STUDENT_ANSWER against the REFERENCE_ANSWER.
+Return STRICT JSON ONLY with the following fields:
 {
   "score": <integer 0-100>,
   "analysis": "<short (3-6 lines) explanation with strengths and weaknesses>",
@@ -164,12 +182,16 @@ Scoring policy:
 - 40-69: Partial, some correct ideas but incomplete.
 - 0-39: Poor, largely incorrect or missing key ideas.
 
-Do not include any text outside the JSON object.
+Do not output anything outside the JSON object.
 """.strip()
 
 
 def build_llm_prompt(question: str, reference_answer: str, student_answer: str) -> str:
+    # A simple generic prompt that works for both seq2seq and chat models
     return f"""
+[SYSTEM]
+{SYSTEM_INSTRUCTIONS}
+
 [QUESTION]
 {question}
 
@@ -183,63 +205,125 @@ Return STRICT JSON only.
 """.strip()
 
 
-@st.cache_resource(show_spinner=False)
-def get_ollama_base_url() -> str:
-    # Change here if your Ollama host is different
-    return "http://localhost:11434"
-
-
-def _ollama_chat(model: str, system: str, user: str, temperature: float, num_predict: int) -> str:
+# ---------- Mode A: Local (FLAN-T5) ----------
+@st.cache_resource(show_spinner=True)
+def load_local_judge(model_id: str = LOCAL_MODEL_ID):
     """
-    Calls Ollama /api/chat with system+user for Llama 2 chat.
-    Returns assistant content as a string.
+    Loads a local seq2seq model for judging (FLAN-T5-base) on CPU or MPS if available.
+    Works on Macs without CUDA/bitsandbytes.
     """
-    base = get_ollama_base_url().rstrip("/")
-    url = f"{base}/api/chat"
+    tokenizer = AutoTokenizer.from_pretrained(model_id, use_fast=True)
+    # Device handling:
+    if torch.backends.mps.is_available():
+        device = torch.device("mps")
+    else:
+        device = torch.device("cpu")
+    model = AutoModelForSeq2SeqLM.from_pretrained(model_id)
+    model.to(device)
+    return tokenizer, model, device
 
-    payload = {
-        "model": model,
-        "messages": [
-            {"role": "system", "content": system},
-            {"role": "user", "content": user},
-        ],
-        "options": {
-            "temperature": temperature,
-            "num_predict": num_predict,
-        },
-        "stream": False
-    }
 
+def generate_local_json_judgement(tokenizer, model, device, prompt: str,
+                                  max_new_tokens: int = 384, temperature: float = 0.0) -> str:
+    """
+    Uses the local FLAN-T5 to generate a JSON judgement string.
+    """
+    # FLAN-T5 doesn't use temperature directly; emulate with do_sample if > 0
+    do_sample = temperature > 0.0
+    inputs = tokenizer(prompt, return_tensors="pt", truncation=True)
+    inputs = {k: v.to(device) for k, v in inputs.items()}
+
+    with torch.inference_mode():
+        output_ids = model.generate(
+            **inputs,
+            max_new_tokens=max_new_tokens,
+            do_sample=do_sample,
+            top_p=0.9 if do_sample else None,
+            temperature=temperature if do_sample else None,
+            num_beams=None if do_sample else 4
+        )
+    return tokenizer.decode(output_ids[0], skip_special_tokens=True).strip()
+
+
+# ---------- Mode B: Hosted (HF Inference API) ----------
+def get_hf_client(api_token: str | None):
+    if not api_token:
+        return None
+    return InferenceClient(token=api_token)
+
+
+def generate_hosted_json_judgement(client: InferenceClient, model_id: str, prompt: str,
+                                   max_new_tokens: int = 384, temperature: float = 0.1, top_p: float = 0.9) -> str:
+    """
+    Calls Hugging Face Inference API text generation endpoint.
+    """
+    # For chat/instruct models, plain prompt works; we enforce JSON via instructions.
+    resp = client.text_generation(
+        model=model_id,
+        prompt=prompt,
+        max_new_tokens=max_new_tokens,
+        temperature=temperature,
+        top_p=top_p,
+        stream=False,
+        return_full_text=False,
+    )
+    # `resp` is a string here
+    return resp.strip()
+
+
+def parse_first_json(text: str) -> dict:
+    m = re.search(r"\{.*\}", text, flags=re.DOTALL)
+    if not m:
+        return {}
     try:
-        resp = requests.post(url, json=payload, timeout=120)
-        resp.raise_for_status()
-        data = resp.json()
-        return data.get("message", {}).get("content", "").strip()
-    except Exception as e:
-        # Return a valid JSON object so the app doesn't break
-        return f'{{"score": 0, "analysis": "Error calling Ollama: {e}", "missing_points": []}}'
+        return json.loads(m.group(0))
+    except Exception:
+        return {}
 
 
 def evaluate_answer_llm(question: str, reference: str, student_answer: str,
-                        model_name: str, temperature: float, num_predict: int) -> dict:
+                        mode: str,
+                        hosted_model_id: str,
+                        temperature: float,
+                        max_new_tokens: int) -> dict:
     """
-    LLM judge via Ollama (Llama 2 chat).
+    LLM judge using Hugging Face (Local FLAN-T5 or Hosted Inference API).
     Returns: {"score": float, "analysis": str, "missing_points": list}
     """
-    user_prompt = build_llm_prompt(question, reference, student_answer)
-    raw = _ollama_chat(
-        model=model_name,
-        system=SYSTEM_PROMPT,
-        user=user_prompt,
-        temperature=temperature,
-        num_predict=num_predict
-    )
+    prompt = build_llm_prompt(question, reference, student_answer)
 
-    # Extract first JSON object
-    m = re.search(r"\{.*\}", raw, flags=re.DOTALL)
-    if m:
+    if mode == "Hosted (HF Inference API)":
+        hf_token = st.secrets.get("HF_TOKEN", None)
+        client = get_hf_client(hf_token)
+        if client is None:
+            return {
+                "score": 0.0,
+                "analysis": "HF Inference API not configured. Add HF_TOKEN in Streamlit secrets or use Local mode.",
+                "missing_points": [],
+            }
+        raw = generate_hosted_json_judgement(
+            client=client,
+            model_id=hosted_model_id,
+            prompt=prompt,
+            max_new_tokens=max_new_tokens,
+            temperature=temperature,
+            top_p=0.9
+        )
+    else:
+        # Local mode (FLAN-T5-base)
+        tokenizer, model, device = load_local_judge(LOCAL_MODEL_ID)
+        raw = generate_local_json_judgement(
+            tokenizer=tokenizer,
+            model=model,
+            device=device,
+            prompt=prompt,
+            max_new_tokens=max_new_tokens,
+            temperature=temperature
+        )
+
+    data = parse_first_json(raw)
+    if data:
         try:
-            data = json.loads(m.group(0))
             score = float(data.get("score", 0))
             analysis = str(data.get("analysis", "")).strip()
             missing_points = data.get("missing_points", [])
@@ -250,12 +334,12 @@ def evaluate_answer_llm(question: str, reference: str, student_answer: str,
         except Exception:
             pass
 
-    # Fallback if model didn’t produce strict JSON
+    # Fallback if no strict JSON
     return {
         "score": 0.0,
         "analysis": (
-            "Could not parse strict JSON from the Ollama output. "
-            "Try lowering temperature, increasing num_predict, or refining the prompt."
+            "Could not parse strict JSON from the model output. "
+            "Try lowering temperature, increasing max_new_tokens, or refining the prompt."
         ),
         "missing_points": [],
     }
@@ -281,16 +365,16 @@ if "history" not in st.session_state:
 # ===============================
 
 st.set_page_config(
-    page_title="ML Q&A Evaluator (Ollama - Llama 2)",
+    page_title="ML Q&A Evaluator (Hugging Face)",
     page_icon="🤖",
     layout="wide",
 )
 
-st.title("🤖 ML Concept Q&A Evaluator (Ollama - Llama 2)")
+st.title("🤖 ML Concept Q&A Evaluator (Hugging Face)")
 st.write(
     "This prototype asks you questions about Machine Learning concepts, "
     "collects your answer, and evaluates it automatically (ROUGE + keyword coverage). "
-    "It also provides an Ollama LLM-based evaluation using Llama 2."
+    "It also provides an LLM-based evaluation (Hugging Face: Local FLAN-T5 or Hosted API)."
 )
 
 with st.sidebar:
@@ -309,14 +393,22 @@ with st.sidebar:
                 del st.session_state[key]
 
     st.markdown("---")
-    st.subheader("Ollama Judge Settings")
-    ollama_model = st.text_input(
-        "Model name (must be pulled in Ollama)",
-        value=DEFAULT_OLLAMA_MODEL,
-        help="Examples: llama2:7b-chat, llama2:13b-chat"
+    st.subheader("LLM Judge Settings (Hugging Face)")
+    judge_mode = st.selectbox(
+        "Select judge mode",
+        options=["Local (FLAN-T5 base)", "Hosted (HF Inference API)"],
+        index=0,
+        help="Use local CPU model (no key) or Hosted HF (requires HF_TOKEN in secrets)."
     )
+
+    hosted_model_id = st.text_input(
+        "Hosted model id (HF Inference API)",
+        value=HOSTED_MODEL_ID_DEFAULT,
+        help="Used only in Hosted mode. Example: meta-llama/Meta-Llama-3.1-8B-Instruct"
+    )
+
     temperature = st.slider("Temperature", min_value=0.0, max_value=1.0, value=0.1, step=0.05)
-    num_predict = st.slider("Max new tokens (num_predict)", min_value=64, max_value=1024, value=384, step=64)
+    max_new_tokens = st.slider("Max new tokens", min_value=64, max_value=1024, value=384, step=64)
 
     st.markdown("---")
     st.subheader("Session stats")
@@ -326,7 +418,7 @@ with st.sidebar:
         st.write(f"Average automatic score: **{avg_score:.1f} / 100**")
 
     st.markdown("---")
-    st.caption("Prototype for Assignment 11.00 – LLM Evaluator (Streamlit + Ollama Llama 2).")
+    st.caption("Prototype for Assignment 11.00 – LLM Evaluator (Streamlit + Hugging Face).")
 
 
 # If there is no current question, sample one
@@ -365,14 +457,15 @@ if submit_clicked and student_answer.strip():
     # 1) Automatic evaluation
     eval_auto = evaluate_answer(reference_answer, student_answer)
 
-    # 2) LLM-based evaluation (Ollama - Llama 2)
+    # 2) LLM-based evaluation (Hugging Face)
     eval_llm = evaluate_answer_llm(
         question=question,
         reference=reference_answer,
         student_answer=student_answer,
-        model_name=ollama_model,
+        mode=judge_mode,
+        hosted_model_id=hosted_model_id,
         temperature=temperature,
-        num_predict=num_predict
+        max_new_tokens=max_new_tokens
     )
 
     # Store last evals in session
@@ -404,8 +497,8 @@ if "last_eval_auto" in st.session_state:
     st.write(f"**Score (0–100):** `{eval_auto['score']}`")
     st.write(textwrap.fill(eval_auto["explanation"], width=100))
 
-    # LLM-based evaluation (Ollama - Llama 2)
-    st.markdown("### 🧠 LLM-based Evaluation (Ollama Judge - Llama 2)")
+    # LLM-based evaluation
+    st.markdown("### 🧠 LLM-based Evaluation (Hugging Face Judge)")
     st.write(f"**LLM Score (0–100):** `{eval_llm['score']}`")
     st.write(textwrap.fill(eval_llm["analysis"], width=100))
     if eval_llm.get("missing_points"):
