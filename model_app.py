@@ -16,10 +16,11 @@ import textwrap
 import streamlit as st
 import evaluate
 import pandas as pd
-import openai
+from openai import OpenAI
 
 # In Streamlit Cloud, define OPENAI_API_KEY in "App settings" -> "Secrets"
-openai.api_key = st.secrets.get("OPENAI_API_KEY", None)
+# OpenAI client – reads API key from Streamlit secrets
+client = OpenAI(api_key=st.secrets.get("OPENAI_API_KEY", None))
 
 # ===============================
 # 1. DATA LOADING
@@ -196,12 +197,12 @@ Compare the student's answer to the reference and respond following the instruct
 
 def call_llm_evaluator(prompt: str) -> dict:
     """
-    Calls the OpenAI API to evaluate the student's answer.
+    Calls the OpenAI API (new client, openai>=1.0.0) to evaluate the student's answer.
     Returns a dict with keys: score (float), analysis (str), missing_points (list).
     If OPENAI_API_KEY is not set, falls back to a dummy response.
     """
-    if openai.api_key is None:
-        # Fallback: keep app running without a key
+    # If there is no API key configured, return placeholder
+    if client.api_key is None:
         return {
             "score": 75.0,
             "analysis": (
@@ -212,16 +213,17 @@ def call_llm_evaluator(prompt: str) -> dict:
         }
 
     try:
-        # Using Chat Completions API with JSON output
-        response = openai.ChatCompletion.create(
-            model="gpt-4.1-mini",  # or any available model in your account
+        response = client.chat.completions.create(
+            model="gpt-4.1-mini",  # or any other model you have access to
             messages=[
                 {"role": "system", "content": LLM_SYSTEM_PROMPT},
                 {"role": "user", "content": prompt},
             ],
             temperature=0.0,
+            response_format={"type": "json_object"},  # ensure JSON-only output
         )
-        content = response["choices"][0]["message"]["content"]
+
+        content = response.choices[0].message.content
         data = json.loads(content)
 
         score = float(data.get("score", 0.0))
@@ -244,12 +246,8 @@ def call_llm_evaluator(prompt: str) -> dict:
 
 
 def evaluate_answer_llm(question: str, reference: str, student_answer: str) -> dict:
-    """
-    Wrapper to build the prompt and call the LLM evaluator.
-    """
     prompt = build_llm_prompt(question, reference, student_answer)
-    llm_response = call_llm_evaluator(prompt)
-    return llm_response
+    return call_llm_evaluator(prompt)
 
 
 def evaluate_answer_llm(question: str, reference: str, student_answer: str) -> dict:
